@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>cbba_task_allocator</name>
+  <version>0.0.0</version>
+  <description>Leader-assisted CBBA task allocation for swarm UAVs.</description>
+  <maintainer email="user@example.com">roboticistprogrammer</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>px4_msgs</depend>
+  <depend>skyw_interfaces</depend>
+  <depend>skyw_swarm</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

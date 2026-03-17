@@ -10,6 +10,7 @@ from rclpy.node import Node
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 from pyzbar import pyzbar
+from std_msgs.msg import String
 
 class QRCodeDetectNode(Node):
     def __init__(self, name):
@@ -20,6 +21,8 @@ class QRCodeDetectNode(Node):
         self.model_path = os.path.join(os.path.abspath(os.path.split(os.path.realpath(__file__))[0]), 'model/detector.tflite')
         self.image_queue = queue.Queue(maxsize=2)
         self.image_sub = self.create_subscription(Image, '/depth_cam/rgb/image_raw', self.image_callback, 1)
+        self.decoded_pub = self.create_publisher(String, '/qr_decoded', 10)
+        self.last_decoded = None
         self.qcd = cv2.QRCodeDetector()
         threading.Thread(target=self.main, daemon=True).start()  
 
@@ -52,6 +55,11 @@ class QRCodeDetectNode(Node):
                 x = obj.rect.left
                 y = obj.rect.top
                 barcode_data = obj.data.decode("utf-8")
+                if barcode_data != self.last_decoded:
+                    msg = String()
+                    msg.data = barcode_data
+                    self.decoded_pub.publish(msg)
+                    self.last_decoded = barcode_data
                 print(barcode_data)
                 cv2.putText(image, barcode_data, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
